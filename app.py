@@ -12,7 +12,7 @@ ALLOWED_EMAIL_PATTERN = re.compile(
     r"^[a-zA-Z0-9_.+-]+@((gmail|hotmail|outlook|yahoo)\.(com|com\.br))$",
     re.IGNORECASE,
 )
-NAME_PATTERN = re.compile(r"[A-Za-z\u00C0-\u00FF '\u00b4`^~.-]+")
+NAME_PATTERN = re.compile(r"[A-Za-zÀ-ÿ '´`^~.-]+")
 VALID_DDDS = {
     "11","12","13","14","15","16","17","18","19",
     "21","22","24","27","28",
@@ -33,62 +33,70 @@ LOCAL_OPTIONS = [
 ]
 
 # =============================================================================
-# 2. CAT\u00c1LOGO DE CURSOS
+# 2. CATÁLOGO DE CURSOS
 # =============================================================================
 COURSE_CATALOG = [
-    {"id": "1", "nome": "SERVI\u00c7OS GERAIS"},
-    {"id": "2", "nome": "PORTEIRO E RECEP\u00c7\u00c3O"},
+    {"id": "1", "nome": "SERVIÇOS GERAIS"},
+    {"id": "2", "nome": "PORTEIRO E RECEPÇÃO"},
     {"id": "3", "nome": "CUIDADOR DE IDOSOS"},
     {"id": "4", "nome": "ASSISTENTE ADMINISTRATIVO"},
 ]
 
 # =============================================================================
-# 3. ENDERE\u00c7OS
+# 3. ENDEREÇOS
 # =============================================================================
 ADDRESS_OPTIONS = {
     "1": "\U0001f4cdRua Tapiranga, 373 - Padre Miguel, Rio de Janeiro - RJ / CEP: 21775-470",
 }
 
 # =============================================================================
-# 4. TURMAS (4 cursos \u00d7 1 local \u00d7 1 hor\u00e1rio)
+# 4. TURMAS
 # =============================================================================
 TURMA_OPTIONS = [
     {
         "id": "1", "curso_id": "1", "local_id": "1",
         "turma_codigo": "SG-PM-01",
-        "turma_label": "S\u00e1bado \u2014 9h \u00e0s 11h (in\u00edcio 15/08)",
-        "dias_aula": "S\u00e1bado", "horario": "9h \u00e0s 11h",
+        "turma_label": "Sábado — 9h às 11h (início 15/08)",
+        "dias_aula": "Sábado", "horario": "9h às 11h",
         "data_inicio": "15/08/2026", "encerramento": "05/09/2026",
         "endereco_id": "1",
     },
     {
         "id": "2", "curso_id": "2", "local_id": "1",
         "turma_codigo": "PR-PM-01",
-        "turma_label": "S\u00e1bado \u2014 9h \u00e0s 11h (in\u00edcio 15/08)",
-        "dias_aula": "S\u00e1bado", "horario": "9h \u00e0s 11h",
+        "turma_label": "Sábado — 9h às 11h (início 15/08)",
+        "dias_aula": "Sábado", "horario": "9h às 11h",
         "data_inicio": "15/08/2026", "encerramento": "05/09/2026",
         "endereco_id": "1",
     },
     {
         "id": "3", "curso_id": "3", "local_id": "1",
         "turma_codigo": "CI-PM-01",
-        "turma_label": "S\u00e1bado \u2014 9h \u00e0s 11h (in\u00edcio 15/08)",
-        "dias_aula": "S\u00e1bado", "horario": "9h \u00e0s 11h",
+        "turma_label": "Sábado — 9h às 11h (início 15/08)",
+        "dias_aula": "Sábado", "horario": "9h às 11h",
         "data_inicio": "15/08/2026", "encerramento": "05/09/2026",
         "endereco_id": "1",
     },
     {
         "id": "4", "curso_id": "4", "local_id": "1",
         "turma_codigo": "AA-PM-01",
-        "turma_label": "S\u00e1bado \u2014 9h \u00e0s 11h (in\u00edcio 15/08)",
-        "dias_aula": "S\u00e1bado", "horario": "9h \u00e0s 11h",
+        "turma_label": "Sábado — 9h às 11h (início 15/08)",
+        "dias_aula": "Sábado", "horario": "9h às 11h",
         "data_inicio": "15/08/2026", "encerramento": "05/09/2026",
+        "endereco_id": "1",
+    },
+    {
+        "id": "5", "curso_id": "4", "local_id": "1",
+        "turma_codigo": "AA-PM-INT-01",
+        "turma_label": "Intensivão — 09h às 16h (28/09/2026)",
+        "dias_aula": "Segunda-feira", "horario": "09h às 16h",
+        "data_inicio": "28/09/2026", "encerramento": "28/09/2026",
         "endereco_id": "1",
     },
 ]
 
 # =============================================================================
-# 5. FUN\u00c7\u00d5ES AUXILIARES
+# 5. FUNÇÕES AUXILIARES
 # =============================================================================
 def build_course_options():
     local_by_id  = {opt["id"]: opt for opt in LOCAL_OPTIONS}
@@ -160,7 +168,7 @@ def fill_form_data_from_selection(form_data):
                 "data_inicio","encerramento","endereco_curso","opcao_id"):
         form_data.setdefault(key, "")
 
-TEMPLATE_WIZARD = """\
+TEMPLATE_WIZARD = r"""
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -271,6 +279,8 @@ TEMPLATE_WIZARD = """\
         .review-check ul{margin:8px 0 0 18px;padding:0;list-style-position:outside;text-align:left;}
         .review-box .form-group{align-items:stretch;text-align:left;}
         .review-box .form-group label{width:100%;text-align:left;}
+        /* Turma select */
+        #turma_id_select{width:100%!important;max-width:100%!important;}
         @media(max-width:860px){.hero-grid,.review-layout{grid-template-columns:1fr;}.step-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}.step-grid.step-grid--stacked{grid-template-columns:minmax(0,1fr);max-width:540px;}}
         @media(max-width:640px){
             html,body{width:100%!important;max-width:100%!important;overflow-x:hidden!important;}body*{min-width:0;}body{overflow-x:hidden;}
@@ -394,6 +404,7 @@ TEMPLATE_WIZARD = """\
                     <div class="step-card"><h2 class="panel-title">Escolha seu curso</h2>
                         <div class="step-grid step-grid--stacked">
                             <div class="form-group full"><label for="curso_id">Curso *</label><select id="curso_id" name="curso_id"><option value="">Selecione um curso</option>{% for curso in course_catalog %}<option value="{{ curso.id }}" {% if form_data.get('curso_id')==curso.id %}selected{% endif %}>{{ curso.nome }}</option>{% endfor %}</select><div class="balao-erro" id="curso_id-error" {% if not errors.get('curso_id') %}hidden{% endif %}>{{ errors.get('curso_id','') }}</div></div>
+                            <div class="form-group full" id="turma-group" style="display:none"><label for="turma_id_select">Turma / Hor&#225;rio *</label><select id="turma_id_select"><option value="">Selecione a turma</option></select></div>
                             <input type="hidden" id="opcao_id" name="opcao_id" value="{{ form_data.get('opcao_id','') }}">
                             <input type="hidden" id="local_id" name="local_id" value="{{ form_data.get('local_id','') }}">
                             <input type="hidden" id="local"    name="local"    value="{{ form_data.get('local','') }}">
@@ -468,15 +479,59 @@ TEMPLATE_WIZARD = """\
             var benefitsSliders=Array.from(document.querySelectorAll('[data-benefits-slider]'));
             var courseOptions={{ course_options|tojson }};
             var courseOptionsById=Object.fromEntries(courseOptions.map(function(o){return[String(o.id),o];}));
-            var turmasByCursoId={};courseOptions.forEach(function(o){turmasByCursoId[o.curso_id]=o;});
+            // turmas agrupadas por curso_id
+            var turmasByCursoId={};
+            courseOptions.forEach(function(o){
+                if(!turmasByCursoId[o.curso_id]) turmasByCursoId[o.curso_id]=[];
+                turmasByCursoId[o.curso_id].push(o);
+            });
             var nomeInput=document.getElementById('nome'),generoInput=document.getElementById('genero'),cpfInput=document.getElementById('cpf'),nascimentoInput=document.getElementById('nascimento'),whatsappInput=document.getElementById('whatsapp'),cepInput=document.getElementById('cep'),bairroInput=document.getElementById('bairro'),emailInput=document.getElementById('email'),confirmaDadosInput=document.getElementById('confirma_dados');
-            var courseSelect=document.getElementById('curso_id'),opcaoIdInput=document.getElementById('opcao_id'),localIdInput=document.getElementById('local_id'),localInput=document.getElementById('local'),localDisplay=document.getElementById('local_display'),cursoInput=document.getElementById('curso'),turmaInput=document.getElementById('turma'),diasAulaInput=document.getElementById('dias_aula'),horarioInput=document.getElementById('horario'),dataInicioInput=document.getElementById('data_inicio'),encerramentoInput=document.getElementById('encerramento'),enderecoInput=document.getElementById('endereco_curso'),btnCopiarEndereco=document.getElementById('btn-copiar-endereco');
+            var courseSelect=document.getElementById('curso_id'),turmaSelect=document.getElementById('turma_id_select'),turmaGroup=document.getElementById('turma-group'),opcaoIdInput=document.getElementById('opcao_id'),localIdInput=document.getElementById('local_id'),localInput=document.getElementById('local'),localDisplay=document.getElementById('local_display'),cursoInput=document.getElementById('curso'),turmaInput=document.getElementById('turma'),diasAulaInput=document.getElementById('dias_aula'),horarioInput=document.getElementById('horario'),dataInicioInput=document.getElementById('data_inicio'),encerramentoInput=document.getElementById('encerramento'),enderecoInput=document.getElementById('endereco_curso'),btnCopiarEndereco=document.getElementById('btn-copiar-endereco');
             function somenteDigitos(v){return(v||'').replace(/\D/g,'');}
             function setError(id,msg){var f=document.getElementById(id),e=document.getElementById(id+'-error');if(f)f.classList.toggle('erro-campo',Boolean(msg));if(e){e.textContent=msg||'';e.hidden=!msg;}}
             function limparCamposInfo(){opcaoIdInput.value='';localIdInput.value='';localInput.value='';if(localDisplay)localDisplay.value='';cursoInput.value='';turmaInput.value='';diasAulaInput.value='';horarioInput.value='';dataInicioInput.value='';encerramentoInput.value='';enderecoInput.value='';}
             function aplicarOpcao(op){if(!op){limparCamposInfo();return;}opcaoIdInput.value=op.id;localIdInput.value=op.local_id;localInput.value=op.local;if(localDisplay)localDisplay.value=op.local;cursoInput.value=op.curso;turmaInput.value=op.turma;diasAulaInput.value=op.dias_aula;horarioInput.value=op.horario;dataInicioInput.value=op.data_inicio;encerramentoInput.value=op.encerramento;enderecoInput.value=op.endereco_curso;setError('curso_id','');syncReview();}
-            courseSelect.addEventListener('change',function(){setError('curso_id','');var c=courseSelect.value;if(c){aplicarOpcao(turmasByCursoId[c]||null);}else{limparCamposInfo();}syncReview();});
-            if(btnCopiarEndereco&&enderecoInput){btnCopiarEndereco.addEventListener('click',function(){navigator.clipboard.writeText(enderecoInput.value).then(function(){btnCopiarEndereco.textContent='COPIADO \u2705';}).catch(function(){enderecoInput.select();document.execCommand('copy');btnCopiarEndereco.textContent='COPIADO \u2705';});setTimeout(function(){btnCopiarEndereco.textContent='COPIAR 📋';},1200);});}
+            function atualizarSelectTurmas(cursoId, opcaoIdPreferida){
+                var turmas=turmasByCursoId[cursoId]||[];
+                turmaSelect.innerHTML='<option value="">Selecione a turma</option>';
+                turmas.forEach(function(t){
+                    var opt=document.createElement('option');
+                    opt.value=t.id;
+                    opt.textContent=t.turma_label||t.turma;
+                    turmaSelect.appendChild(opt);
+                });
+                if(turmas.length===1){
+                    // auto-seleciona se só houver uma turma
+                    turmaSelect.value=turmas[0].id;
+                    turmaGroup.style.display='none';
+                    aplicarOpcao(turmas[0]);
+                } else if(turmas.length>1){
+                    turmaGroup.style.display='';
+                    if(opcaoIdPreferida){
+                        turmaSelect.value=opcaoIdPreferida;
+                        aplicarOpcao(courseOptionsById[String(opcaoIdPreferida)]||null);
+                    } else {
+                        turmaSelect.value='';
+                        limparCamposInfo();
+                    }
+                } else {
+                    turmaGroup.style.display='none';
+                    limparCamposInfo();
+                }
+            }
+            courseSelect.addEventListener('change',function(){
+                setError('curso_id','');
+                var c=courseSelect.value;
+                if(c){atualizarSelectTurmas(c,null);}
+                else{turmaGroup.style.display='none';limparCamposInfo();}
+                syncReview();
+            });
+            turmaSelect.addEventListener('change',function(){
+                var op=courseOptionsById[String(turmaSelect.value)];
+                aplicarOpcao(op||null);
+                syncReview();
+            });
+            if(btnCopiarEndereco&&enderecoInput){btnCopiarEndereco.addEventListener('click',function(){navigator.clipboard.writeText(enderecoInput.value).then(function(){btnCopiarEndereco.textContent='COPIADO ✅';}).catch(function(){enderecoInput.select();document.execCommand('copy');btnCopiarEndereco.textContent='COPIADO ✅';});setTimeout(function(){btnCopiarEndereco.textContent='COPIAR \u{1F4CB}';},1200);});}
             function mostrarPasso(step){panels.forEach(function(p){p.classList.toggle('ativo',p.dataset.step===step);});labels.forEach(function(l){l.classList.toggle('ativo',l.dataset.stepLabel===step);});fill.style.width=(progressByStep[step]||25)+'%';window.scrollTo({top:0,behavior:'smooth'});}
             function syncReview(){reviewTargets.forEach(function(t){var key=t.dataset.review;if(key==='curso_nome'){t.textContent=cursoInput?cursoInput.value.trim():'';return;}if(key==='local_nome'){t.textContent=localInput?localInput.value.trim():'';return;}var f=document.getElementById(key);if(!f){t.textContent='';return;}if(f.tagName==='SELECT'){var s=f.options[f.selectedIndex];t.textContent=s?s.text.trim():'';}else{t.textContent=f.value.trim();}});}
             function validarCPF(cpf){var d=somenteDigitos(cpf);if(d.length!==11||/^(\d)\1+$/.test(d))return false;var s=0,g;for(var i=0;i<9;i++)s+=Number(d[i])*(10-i);g=(s*10)%11;if(g===10)g=0;if(g!==Number(d[9]))return false;s=0;for(var i=0;i<10;i++)s+=Number(d[i])*(11-i);g=(s*10)%11;if(g===10)g=0;return g===Number(d[10]);}
@@ -487,16 +542,16 @@ TEMPLATE_WIZARD = """\
             function mascNasc(){var v=somenteDigitos(nascimentoInput.value).slice(0,8);if(v.length>4)v=v.replace(/(\d{2})(\d{2})(\d{1,4})/,'$1/$2/$3');else if(v.length>2)v=v.replace(/(\d{2})(\d{1,2})/,'$1/$2');nascimentoInput.value=v;}
             function mascWpp(){var v=somenteDigitos(whatsappInput.value).slice(0,11);if(v.length>6)v=v.replace(/(\d{2})(\d{5})(\d{0,4})/,'($1) $2-$3');else if(v.length>2)v=v.replace(/(\d{2})(\d{1,5})/,'($1) $2');whatsappInput.value=v;}
             function mascCep(){var v=somenteDigitos(cepInput.value).slice(0,8);if(v.length>5)v=v.replace(/(\d{5})(\d{1,3})/,'$1-$2');cepInput.value=v;}
-            function vNome(){var v=nomeInput.value.trim();if(!v){setError('nome','Digite seu nome completo.');return false;}if(v.length>50){setError('nome','M\u00e1ximo 50 caracteres.');return false;}if(!/^[A-Za-z\u00C0-\u00FF '\u00b4`^~.-]+$/.test(v)){setError('nome','Use apenas letras e sinais permitidos.');return false;}setError('nome','');return true;}
-            function vGenero(){if(!generoInput.value){setError('genero','Selecione o g\u00eanero.');return false;}setError('genero','');return true;}
-            function vCPF(){if(!validarCPF(cpfInput.value)){setError('cpf','CPF inv\u00e1lido.');return false;}setError('cpf','');return true;}
+            function vNome(){var v=nomeInput.value.trim();if(!v){setError('nome','Digite seu nome completo.');return false;}if(v.length>50){setError('nome','Máximo 50 caracteres.');return false;}if(!/^[A-Za-zÀ-ÿ '´`^~.-]+$/.test(v)){setError('nome','Use apenas letras e sinais permitidos.');return false;}setError('nome','');return true;}
+            function vGenero(){if(!generoInput.value){setError('genero','Selecione o gênero.');return false;}setError('genero','');return true;}
+            function vCPF(){if(!validarCPF(cpfInput.value)){setError('cpf','CPF inválido.');return false;}setError('cpf','');return true;}
             function vNasc(){if(!idadePermitida(nascimentoInput.value)){setError('nascimento','Idade permitida: 16 a 90 anos.');return false;}setError('nascimento','');return true;}
-            function vWpp(){var d=somenteDigitos(whatsappInput.value);if(d.length!==11||!/^\(\d{2}\) \d{5}-\d{4}$/.test(whatsappInput.value)||!validarDDD(whatsappInput.value)){setError('whatsapp','Informe um WhatsApp com DDD v\u00e1lido do Brasil.');return false;}setError('whatsapp','');return true;}
-            function vCep(){if(!/^\d{5}-\d{3}$/.test(cepInput.value.trim())){setError('cep','CEP inv\u00e1lido. Formato: 00000-000.');return false;}setError('cep','');return true;}
-            function vBairro(){var v=bairroInput.value.trim();if(!v){setError('bairro','Informe o bairro.');return false;}if(v.length>40){setError('bairro','M\u00e1ximo 40 caracteres.');return false;}setError('bairro','');return true;}
-            function vEmail(){if(!validarEmail(emailInput.value)){setError('email','Digite um e-mail v\u00e1lido (Gmail, Hotmail, Outlook ou Yahoo).');return false;}setError('email','');return true;}
+            function vWpp(){var d=somenteDigitos(whatsappInput.value);if(d.length!==11||!/^\(\d{2}\) \d{5}-\d{4}$/.test(whatsappInput.value)||!validarDDD(whatsappInput.value)){setError('whatsapp','Informe um WhatsApp com DDD válido do Brasil.');return false;}setError('whatsapp','');return true;}
+            function vCep(){if(!/^\d{5}-\d{3}$/.test(cepInput.value.trim())){setError('cep','CEP inválido. Formato: 00000-000.');return false;}setError('cep','');return true;}
+            function vBairro(){var v=bairroInput.value.trim();if(!v){setError('bairro','Informe o bairro.');return false;}if(v.length>40){setError('bairro','Máximo 40 caracteres.');return false;}setError('bairro','');return true;}
+            function vEmail(){if(!validarEmail(emailInput.value)){setError('email','Digite um e-mail válido (Gmail, Hotmail, Outlook ou Yahoo).');return false;}setError('email','');return true;}
             function validarPassoDados(){var checks=[{ok:vNome(),f:nomeInput},{ok:vGenero(),f:generoInput},{ok:vCPF(),f:cpfInput},{ok:vNasc(),f:nascimentoInput},{ok:vWpp(),f:whatsappInput},{ok:vCep(),f:cepInput},{ok:vBairro(),f:bairroInput},{ok:vEmail(),f:emailInput}];var first=checks.find(function(c){return!c.ok;});if(first){first.f.focus();return false;}return true;}
-            function validarPassoEscolher(){if(!courseSelect.value){setError('curso_id','Selecione um curso.');courseSelect.focus();return false;}if(!opcaoIdInput.value){setError('curso_id','N\u00e3o foi poss\u00edvel determinar a turma.');return false;}return true;}
+            function validarPassoEscolher(){if(!courseSelect.value){setError('curso_id','Selecione um curso.');courseSelect.focus();return false;}if(!opcaoIdInput.value){setError('curso_id','Selecione a turma/horário desejado.');turmaSelect.focus();return false;}return true;}
             function validarPassoRevisao(){if(!confirmaDadosInput.checked){setError('confirma_dados','Confirme os dados para finalizar.');confirmaDadosInput.focus();return false;}setError('confirma_dados','');return true;}
             async function buscarBairro(){var l=somenteDigitos(cepInput.value);if(l.length!==8)return;try{var r=await fetch('https://viacep.com.br/ws/'+l+'/json/');var d=await r.json();if(!d.erro&&d.bairro){bairroInput.value=d.bairro;vBairro();syncReview();}}catch(e){console.error(e);}}
             document.querySelectorAll('[data-next]').forEach(function(btn){btn.addEventListener('click',function(){var t=btn.dataset.next;if(t==='escolher'&&!validarPassoDados())return;if(t==='revisao'&&!validarPassoEscolher())return;syncReview();mostrarPasso(t);});});
@@ -511,9 +566,14 @@ TEMPLATE_WIZARD = """\
             emailInput.addEventListener('input',function(){if(emailInput.value.trim())vEmail();else setError('email','');syncReview();});
             confirmaDadosInput.addEventListener('change',function(){if(confirmaDadosInput.checked)setError('confirma_dados','');});
             ['nome','genero','whatsapp','cep','bairro','email','curso_id','como_conheceu'].forEach(function(id){var f=document.getElementById(id);if(f){f.addEventListener('input',syncReview);f.addEventListener('change',syncReview);}});
-            function initBenefitsSlider(slider){var slides=Array.from(slider.querySelectorAll('.benefit-slide')),dotsHost=slider.querySelector('[data-benefits-dots]'),prevBtn=slider.querySelector('[data-benefits-prev]'),nextBtn=slider.querySelector('[data-benefits-next]');if(!slides.length||!dotsHost||!prevBtn||!nextBtn)return;var cur=Math.max(slides.findIndex(function(s){return s.classList.contains('ativo');}),0),timer;var dots=slides.map(function(_,i){var dot=document.createElement('button');dot.type='button';dot.className='benefits-dot';dot.setAttribute('aria-label','Benef\u00edcio '+(i+1));dot.addEventListener('click',function(){show(i);restart();});dotsHost.appendChild(dot);return dot;});function show(i){cur=(i+slides.length)%slides.length;slides.forEach(function(s,j){s.classList.toggle('ativo',j===cur);});dots.forEach(function(d,j){d.classList.toggle('ativo',j===cur);});}function restart(){clearInterval(timer);timer=setInterval(function(){show(cur+1);},3200);}prevBtn.addEventListener('click',function(){show(cur-1);restart();});nextBtn.addEventListener('click',function(){show(cur+1);restart();});slider.addEventListener('mouseenter',function(){clearInterval(timer);});slider.addEventListener('mouseleave',restart);show(cur);restart();}
+            function initBenefitsSlider(slider){var slides=Array.from(slider.querySelectorAll('.benefit-slide')),dotsHost=slider.querySelector('[data-benefits-dots]'),prevBtn=slider.querySelector('[data-benefits-prev]'),nextBtn=slider.querySelector('[data-benefits-next]');if(!slides.length||!dotsHost||!prevBtn||!nextBtn)return;var cur=Math.max(slides.findIndex(function(s){return s.classList.contains('ativo');}),0),timer;var dots=slides.map(function(_,i){var dot=document.createElement('button');dot.type='button';dot.className='benefits-dot';dot.setAttribute('aria-label','Benefício '+(i+1));dot.addEventListener('click',function(){show(i);restart();});dotsHost.appendChild(dot);return dot;});function show(i){cur=(i+slides.length)%slides.length;slides.forEach(function(s,j){s.classList.toggle('ativo',j===cur);});dots.forEach(function(d,j){d.classList.toggle('ativo',j===cur);});}function restart(){clearInterval(timer);timer=setInterval(function(){show(cur+1);},3200);}prevBtn.addEventListener('click',function(){show(cur-1);restart();});nextBtn.addEventListener('click',function(){show(cur+1);restart();});slider.addEventListener('mouseenter',function(){clearInterval(timer);});slider.addEventListener('mouseleave',restart);show(cur);restart();}
+            // Restaurar seleção ao carregar (volta de erro)
             var initCursoId='{{ form_data.get("curso_id","") }}';
-            if(initCursoId){courseSelect.value=initCursoId;aplicarOpcao(turmasByCursoId[initCursoId]||null);}
+            var initOpcaoId='{{ form_data.get("opcao_id","") }}';
+            if(initCursoId){
+                courseSelect.value=initCursoId;
+                atualizarSelectTurmas(initCursoId, initOpcaoId||null);
+            }
             benefitsSliders.forEach(initBenefitsSlider);
             syncReview();
             mostrarPasso(stepOrder.includes(startStep)?startStep:'index');
@@ -523,7 +583,7 @@ TEMPLATE_WIZARD = """\
 </html>
 """
 
-TEMPLATE_CONFIRMACAO = """\
+TEMPLATE_CONFIRMACAO = r"""
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -618,8 +678,9 @@ TEMPLATE_CONFIRMACAO = """\
 </body>
 </html>
 """
+
 # =============================================================================
-# APLICA\u00c7\u00c3O FLASK
+# APLICAÇÃO FLASK
 # =============================================================================
 app = Flask(__name__)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", "chave-secreta-para-sessao")
@@ -673,26 +734,26 @@ def validate_form_data(form_data):
     selected_option=get_course_option(form_data.get("opcao_id",""))
     if not selected_curso: errors["curso_id"]="Selecione um curso."
     if not selected_option:
-        errors["curso_id"]=errors.get("curso_id","Selecione um local e hor\u00e1rio para o curso.")
+        errors["curso_id"]=errors.get("curso_id","Selecione a turma/horário desejado.")
     elif selected_option and selected_curso and selected_option["curso_id"]!=selected_curso:
-        errors["curso_id"]="A turma n\u00e3o pertence ao curso escolhido."
+        errors["curso_id"]="A turma não pertence ao curso escolhido."
     nome=form_data["nome"]
     if not nome: errors["nome"]="Digite seu nome completo."
-    elif len(nome)>50: errors["nome"]="O nome deve ter no m\u00e1ximo 50 caracteres."
+    elif len(nome)>50: errors["nome"]="O nome deve ter no máximo 50 caracteres."
     elif not NAME_PATTERN.fullmatch(nome): errors["nome"]="Use apenas letras e sinais permitidos no nome."
-    if form_data["genero"] not in {"Feminino","Masculino","Outro","Prefiro n\u00e3o dizer"}:
-        errors["genero"]="Selecione o g\u00eanero."
-    if not cpf_valido(form_data["cpf"]): errors["cpf"]="CPF inv\u00e1lido. Verifique e digite novamente."
-    if not idade_aceita(form_data["nascimento"]): errors["nascimento"]="Idade permitida: de 16 at\u00e9 90 anos."
-    if not whatsapp_valido(form_data["whatsapp"]): errors["whatsapp"]="Informe um WhatsApp com DDD v\u00e1lido do Brasil."
-    if not re.fullmatch(r"\d{5}-\d{3}",form_data["cep"] or ""): errors["cep"]="CEP inv\u00e1lido. Formato: 00000-000."
+    if form_data["genero"] not in {"Feminino","Masculino","Outro","Prefiro não dizer"}:
+        errors["genero"]="Selecione o gênero."
+    if not cpf_valido(form_data["cpf"]): errors["cpf"]="CPF inválido. Verifique e digite novamente."
+    if not idade_aceita(form_data["nascimento"]): errors["nascimento"]="Idade permitida: de 16 até 90 anos."
+    if not whatsapp_valido(form_data["whatsapp"]): errors["whatsapp"]="Informe um WhatsApp com DDD válido do Brasil."
+    if not re.fullmatch(r"\d{5}-\d{3}",form_data["cep"] or ""): errors["cep"]="CEP inválido. Formato: 00000-000."
     bairro=form_data["bairro"]
     if not bairro: errors["bairro"]="Informe o bairro."
-    elif len(bairro)>40: errors["bairro"]="O bairro deve ter no m\u00e1ximo 40 caracteres."
+    elif len(bairro)>40: errors["bairro"]="O bairro deve ter no máximo 40 caracteres."
     if not ALLOWED_EMAIL_PATTERN.fullmatch(form_data["email"] or ""):
-        errors["email"]="Digite um e-mail v\u00e1lido do Gmail, Hotmail, Outlook ou Yahoo."
+        errors["email"]="Digite um e-mail válido do Gmail, Hotmail, Outlook ou Yahoo."
     if form_data["confirma_dados"]!="sim":
-        errors["confirma_dados"]="Confirme os dados para finalizar a inscri\u00e7\u00e3o."
+        errors["confirma_dados"]="Confirme os dados para finalizar a inscrição."
     return errors
 
 def error_step(errors):
@@ -712,7 +773,7 @@ def render_wizard(form_data=None, errors=None, current_step="index"):
         current_step=current_step,
         errors=errors or {},
         form_data=current_form_data,
-        generos=["Feminino","Masculino","Outro","Prefiro n\u00e3o dizer"],
+        generos=["Feminino","Masculino","Outro","Prefiro não dizer"],
     )
 
 @app.route("/",methods=["GET"])
